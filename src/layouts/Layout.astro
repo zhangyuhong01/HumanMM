@@ -1,0 +1,108 @@
+---
+interface Props {
+  frontmatter: {
+    title: string;
+    description?: string;
+    favicon: string;
+    thumbnail?: string;
+  };
+}
+
+const { title, description, favicon, thumbnail } = Astro.props.frontmatter;
+const baseUrl = import.meta.env.BASE_URL;
+const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    {description && <meta name="description" content={description} />}
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href={prefix + favicon} />
+
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content="website" />
+    {thumbnail && <meta property="og:image" content={prefix + thumbnail} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.css"
+      integrity="sha384-WsHMgfkABRyG494OmuiNmkAOk8nhO1qE+Y6wns6v+EoNoTNxrWxYpl5ZYWFOLPCM"
+      crossorigin="anonymous"
+    />
+
+    <title>{title}</title>
+  </head>
+  <body
+    class="flex flex-col gap-4 items-center pt-12 pb-6 w-full *:px-6 *:max-w-[60rem]"
+  >
+    <slot />
+    <footer class="m-auto">
+      <p class="text-zinc-500 text-sm">
+        This page was built using <a
+          href="https://github.com/RomanHauksson/academic-project-astro-template"
+          >Roman Hauksson's academic project page template</a
+        >, which was adapted from <a
+          href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+          >Eliahu Horwitz's template</a
+        >, which was adapted from <a href="https://nerfies.github.io/"
+          >Keunhong Park's project page for <i>Nerfies</i></a
+        >. It is licensed under a <a
+          href="http://creativecommons.org/licenses/by-sa/4.0/"
+          >Creative Commons Attribution-ShareAlike 4.0 International License</a
+        >.
+      </p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  body {
+    font-family: "Noto Sans", sans-serif;
+    @apply text-zinc-900 bg-zinc-50;
+  }
+  a {
+    @apply text-blue-500 hover:underline;
+  }
+  p {
+    @apply text-lg w-full;
+  }
+  h1 {
+    @apply text-5xl text-center font-medium;
+  }
+  h2 {
+    @apply w-full text-3xl font-bold;
+  }
+  h3 {
+    @apply w-full text-xl font-bold;
+  }
+  h4 {
+    @apply w-full font-bold;
+  }
+  table {
+    @apply border-y-2 border-black;
+  }
+  thead {
+    @apply border-b border-black;
+  }
+  th,
+  td {
+    @apply px-4;
+  }
+  ul {
+    @apply prose list-disc list-inside w-full;
+  }
+  ol {
+    @apply prose list-decimal list-inside w-full;
+  }
+</style>

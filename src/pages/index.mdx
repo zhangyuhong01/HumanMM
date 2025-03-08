@@ -1,0 +1,242 @@
+---
+layout: ../layouts/Layout.astro
+title: HumanMM :Global Human Motion Recovery from Multi-shot Videos
+description: Simple project page template for your research paper, built with Astro and Tailwind CSS
+favicon: favicon.svg
+thumbnail: screenshot.png
+---
+
+import Layout from "../layouts/Layout.astro";
+
+import Header from "../components/Header.astro";
+import Video from "../components/Video.astro";
+import HighlightedSection from "../components/HighlightedSection.astro";
+import SmallCaps from "../components/SmallCaps.astro";
+import Figure from "../components/Figure.astro";
+import Image from "../components/Image.astro";
+import TwoColumns from "../components/TwoColumns.astro";
+import YouTubeVideo from "../components/YouTubeVideo.astro";
+import LaTeX from "../components/LaTeX.astro";
+
+import outside from "../assets/outside.mp4";
+import transformer from "../assets/transformer.webp";
+import ms_pipeline from "../assets/ms-pipeline.webp";
+import main_experiment from "../assets/main-experiment.jpg";
+import teaser from "../assets/teaser.webp";
+import mshmr from "../assets/mshmr.jpg";
+import oam from "../assets/OAM.jpg";
+import compare_vis1 from "../assets/vis_comp_1_00.jpg";
+import compare_vis2 from "../assets/vis_comp_2_00.jpg";
+import compare_vis3 from "../assets/vis_comp_3_00.jpg";
+import case1 from "../assets/case1.jpg";
+import case2 from "../assets/case2.jpg";
+
+import Splat from "../components/Splat.tsx"
+
+import CodeBlock from "../components/CodeBlock.astro";
+import Table from "../components/Table.astro";
+export const components = {pre: CodeBlock, table: Table}
+
+<Header
+  title={frontmatter.title}
+  authors={[
+    {
+      name: "Yuhong Zhang",
+      url: "https://scholar.google.com/citations?user=oV7sxpYAAAAJ&hl=zh-CN",
+      institution: "Tsinghua University",
+      notes: ["*",],
+    },
+    {
+      name: "Guanlin Wu",
+      url: "https://guanlinwu123.github.io",
+      institution: "Johns Hopkins University",
+      notes: ["*",],
+    },
+    {
+      name: "Linghao Chen",
+      url: "https://lhchen.top/",
+      institution: "Tsinghua University",
+    },
+    {
+      name: "Zhuokai Zhao",
+      url: "https://zhuokai-zhao.com/",
+      institution: "Meta",
+    },
+    {
+      name: "Jing Lin",
+      url: "https://jinglin7.github.io/",
+      institution: "Tsinghua University",
+    },
+    {
+      name: "Xiaoke Jiang",
+      institution: "IDEA",
+    },
+    {
+      name: "Jiamin Wu",
+      institution: "IDEA",
+    },
+    {
+      name: "Zhuoheng Li",
+      institution: "HKU",
+    },
+    {
+      name: "Hao Frank Yang",
+      institution: "Johns Hopkins University",
+    },
+    {
+      name: "Haoqian Wang",
+      url: "https://www.sigs.tsinghua.edu.cn/whq_en/main.htm",
+      institution: "Tsinghua University",
+      notes: ["†"],
+    },
+    {
+      name: "Lei Zhang",
+      url: "https://www.leizhang.org/",
+      institution: "IDEA",
+      notes: ["†"],
+    },
+  ]}
+  conference="CVPR 2025"
+  notes={[
+    {
+      symbol: "*",
+      text: "Equal Contribution",
+    },
+    {
+      symbol: "†",
+      text: "Corresponding Author",
+    },
+  ]}
+  links={[
+    {
+      name: "Paper",
+      url: "https://openreview.net/group?id=thecvf.com/CVPR/2025/Conference/Authors&referrer=%5BHomepage%5D(%2F)",
+      icon: "ri:file-pdf-2-line",
+    },
+    {
+      name: "Code",
+      url: "https://github.com/zhangyuhong01/HumanMM",
+      icon: "ri:github-line",
+    },
+    {
+      name: "arXiv",
+      url: "",
+      icon: "academicons:arxiv",
+    },
+    {
+      name: "Dataset",
+      url: "",
+      icon: "academicons:arxiv",
+    },
+  ]}
+  />
+
+## Demo Video
+<Video source={outside} />
+
+<Figure
+    caption="Recovering a human motion from multi-shot videos. Top: We take two multi-shot table tennis game videos with shot transitions as input. We aim to recover two motions of two athletes (Long MA and Zhendong FAN) from two videos, respectively. The
+first video is recorded by three shots (“①”, “②”, and “③” ), and the second one is recovered by two shots (“④” and “⑤” ). Bottom: We recover two motions (Long MA in green and Zhendong FAN in pink), different shots, and camera poses for each multi-shot video. The
+recovered motion is aligned with the motion in the videos"
+  >
+    <Image source={teaser} altText="Pingpong." />
+</Figure>
+<HighlightedSection>
+
+## Abstract
+
+we present a novel framework designed to reconstruct long-sequence 3D human motion in the world coordinates from in-the-wild videos with multiple shot transitions. 
+Such long-sequence in-the-wild motions are highly valuable to applications such as motion generation and motion understanding, but are of great challenge to be
+recovered due to abrupt shot transitions, partial occlusions, and dynamic backgrounds presented in such videos. Existing methods primarily focus on single-shot videos,
+where continuity is maintained within a single camera view, or simplify multi-shot alignment in camera space only. In this work, we tackle the challenges by integrating an enhanced camera pose estimation with Human Motion Recovery (HMR) by incorporating a shot transition detector and a robust alignment module for accurate pose and orientation continuity across shots. By leveraging a custom motion integrator, we effectively mitigate the problem of foot sliding and ensure temporal consistency in human pose. Extensive evaluations on our created multi-shot dataset from public 3D human datasets demonstrate the robustness of our method in reconstructing realistic human motion in world coordinates. 
+
+</HighlightedSection>
+
+## Pipeline
+
+HumanMM processes multi-shot video sequences by first extracting motion feature such as keypoints and bounding boxes, using ViTPose and image feature using ViT. 
+These features are then segmented into single-shot clips via Shot Transition Detection (Sec. 3.2). Initialized camera (camera rotation R and camera translation T) 
+and human (SMPL) parameters for each shot are estimated using Masked LEAP-VO (Sec. 3.3) and GVHMR. Human orientation is aligned across shots through camera calibration
+ (3.4.1), and ms-HMR (Sec. 3.4.2) ensures consistent pose alignment. Finally, a bi-directional LSTM-based trajectory predictor with trajectory refiner predicts trajectory based on aligned motion and mitigates foot sliding throughout the video.
+
+<Figure
+    caption="Diagram of the transformer deep learning architecture."
+  >
+    <Image source={ms_pipeline} altText="Pingpong." />
+</Figure>
+
+## Core Modules
+
+Use the two columns component to display two columns of content. In this example, the first column contains a figure with a YouTube video and the second column contains a figure with a custom [React](https://react.dev/) component. By default, they display side by side, but if the screen is narrow enough (for example, on mobile), they're arranged vertically.
+
+<TwoColumns>
+  <Figure slot="left" caption="MS-HMR">
+    <Image source={mshmr} altText="Pingpong." />
+  </Figure>
+  <Figure slot="right" caption="Orient Alignment Module">
+    <Image source={oam} altText="Pingpong." />
+  </Figure>
+</TwoColumns>
+
+
+
+## Aligning Human Motion Between Shots
+
+To align the orientations between two frames with shot transition, we decompose the human orientation with shot transitions in world 
+coordinates as,
+
+<LaTeX formula="\mathtt{R}(\Gamma_{\text{world}}) = \mathbf{R}_{\delta_{\text{cam}}} \mathtt{R}(\Gamma_{\text{view}})," />
+
+
+## Experiment
+
+We compare our proposed method with several state-of-the-art HMR methods SLAHMR, WHAM and GVHMR on our proposed benchmark. As illustrated in the table below, 
+our proposed method has achieved the best performance for PA\&WA-MPJPE, RTE and ROE through videos with all numbers of shots across \msaist and \msm, indicating 
+that our method reconstructs both the global human motion and orientations in the world coordinates more accurately and robustly. For the foot sliding metric, 
+our method also performs as the best on \msm across all numbers of shots.
+<Figure>
+    <Image source={main_experiment} altText="exp1." />
+</Figure>
+
+<br />
+
+<br />
+## Visualization of Comparison between Existing Methods
+<Figure
+    caption=""
+  >
+    <Image source={compare_vis1} altText="exp1." />
+</Figure>
+<Figure
+    caption=""
+  >
+    <Image source={compare_vis2} altText="exp1." />
+</Figure>
+<Figure
+    caption=""
+  >
+    <Image source={compare_vis3} altText="exp1." />
+</Figure>
+
+<br />
+
+## Visualization of in-the-wild multi-shot video
+<br />
+<Figure caption="">
+  <Image source={case1} altText="exp1." style="width: 2000px;" />
+</Figure>
+
+<Figure caption="">
+  <Image source={case2} altText="exp1." style="width: 2000px;" />
+</Figure>
+
+## BibTeX citation
+
+```bibtex
+@misc{roman2024academic,
+  author = "{Roman Hauksson}",
+  title = "Academic Project Page Template",
+  year = "2024",
+  howpublished = "\url{https://research-template.roman.technology}",
+}
+```
