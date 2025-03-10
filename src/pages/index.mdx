@@ -6,7 +6,7 @@ favicon: favicon.svg
 thumbnail: screenshot.png
 ---
 
-import Layout from "../layouts/Layout.astro";
+
 
 import Header from "../components/Header.astro";
 import Video from "../components/Video.astro";
@@ -18,7 +18,9 @@ import TwoColumns from "../components/TwoColumns.astro";
 import YouTubeVideo from "../components/YouTubeVideo.astro";
 import LaTeX from "../components/LaTeX.astro";
 
-import outside from "../assets/outside.mp4";
+import { ImageComparison } from "../components/ImageComparison.tsx";
+
+
 import transformer from "../assets/transformer.webp";
 import ms_pipeline from "../assets/ms-pipeline.webp";
 import main_experiment from "../assets/main-experiment.jpg";
@@ -31,7 +33,7 @@ import compare_vis3 from "../assets/vis_comp_3_00.jpg";
 import case1 from "../assets/case1.jpg";
 import case2 from "../assets/case2.jpg";
 
-import Splat from "../components/Splat.tsx"
+
 
 import CodeBlock from "../components/CodeBlock.astro";
 import Table from "../components/Table.astro";
@@ -53,14 +55,14 @@ export const components = {pre: CodeBlock, table: Table}
       notes: ["*",],
     },
     {
-      name: "Linghao Chen",
+      name: "Ling-Hao Chen",
       url: "https://lhchen.top/",
-      institution: "Tsinghua University",
+      institution: "Tsinghua University, IDEA",
     },
     {
       name: "Zhuokai Zhao",
       url: "https://zhuokai-zhao.com/",
-      institution: "Meta",
+      institution: "University of Chicago",
     },
     {
       name: "Jing Lin",
@@ -131,9 +133,21 @@ export const components = {pre: CodeBlock, table: Table}
   ]}
   />
 
-## Demo Video
-<Video source={outside} />
 
+
+
+
+<HighlightedSection>
+## Demo
+<Figure
+    caption="We present the first method capable of recovering globally consistent motion from multi-shot videos, maintaining cross-view motion coherence 
+    across sequential video clips with continuous poses but varying camera angles. To support this task, we have constructed a dedicated benchmark containing 
+    synchronized multi-view sequences. Our video demonstration showcases the proposed algorithm's performance through visual comparisons on both in-the-wild 
+    footage and benchmark datasets. We gratefully acknowledge WHAM [1] for sharing their visualization framework that facilitated our result presentations."
+  >
+  <YouTubeVideo videoId="8RB3PK8orVI" />
+</Figure>
+</HighlightedSection>
 <Figure
     caption="Recovering a human motion from multi-shot videos. Top: We take two multi-shot table tennis game videos with shot transitions as input. We aim to recover two motions of two athletes (Long MA and Zhendong FAN) from two videos, respectively. The
 first video is recorded by three shots (“①”, “②”, and “③” ), and the second one is recovered by two shots (“④” and “⑤” ). Bottom: We recover two motions (Long MA in green and Zhendong FAN in pink), different shots, and camera poses for each multi-shot video. The
@@ -167,8 +181,6 @@ and human (SMPL) parameters for each shot are estimated using Masked LEAP-VO (Se
 
 ## Core Modules
 
-Use the two columns component to display two columns of content. In this example, the first column contains a figure with a YouTube video and the second column contains a figure with a custom [React](https://react.dev/) component. By default, they display side by side, but if the screen is narrow enough (for example, on mobile), they're arranged vertically.
-
 <TwoColumns>
   <Figure slot="left" caption="MS-HMR">
     <Image source={mshmr} altText="Pingpong." />
@@ -179,6 +191,9 @@ Use the two columns component to display two columns of content. In this example
 </TwoColumns>
 
 
+<Figure>
+  <YouTubeVideo slot="figure" videoId="8RB3PK8orVI" />
+</Figure>
 
 ## Aligning Human Motion Between Shots
 
@@ -229,6 +244,12 @@ our method also performs as the best on \msm across all numbers of shots.
 <Figure caption="">
   <Image source={case2} altText="exp1." style="width: 2000px;" />
 </Figure>
+
+## Acknowledgement
+This work was partially funded by the Shen-zhen Science and Technology Project under Grant KJZD20240903103210014. The author team would also like to convey sincere thanks to Ms. Yaxin Chen from
+IDEA Research for the expressive dance motion used in the demo presentation.
+
+
 
 ## BibTeX citation
 
