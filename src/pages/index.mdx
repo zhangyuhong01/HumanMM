@@ -22,7 +22,7 @@ import { ImageComparison } from "../components/ImageComparison.tsx";
 
 
 import transformer from "../assets/transformer.webp";
-import ms_pipeline from "../assets/ms-pipeline.webp";
+import ms_pipeline from "../assets/pipeline.webp";
 import main_experiment from "../assets/main-experiment.jpg";
 import teaser from "../assets/teaser.webp";
 import mshmr from "../assets/mshmr.jpg";
@@ -83,6 +83,7 @@ export const components = {pre: CodeBlock, table: Table}
     },
     {
       name: "Hao Frank Yang",
+      url: "https://www.haofrankyang.net",
       institution: "Johns Hopkins University",
     },
     {
@@ -110,16 +111,6 @@ export const components = {pre: CodeBlock, table: Table}
     },
   ]}
   links={[
-    {
-      name: "Paper",
-      url: "https://openreview.net/group?id=thecvf.com/CVPR/2025/Conference/Authors&referrer=%5BHomepage%5D(%2F)",
-      icon: "ri:file-pdf-2-line",
-    },
-    {
-      name: "Code",
-      url: "https://github.com/zhangyuhong01/HumanMM",
-      icon: "ri:github-line",
-    },
     {
       name: "arXiv",
       url: "",
@@ -174,7 +165,7 @@ and human (SMPL) parameters for each shot are estimated using Masked LEAP-VO (Se
  (3.4.1), and ms-HMR (Sec. 3.4.2) ensures consistent pose alignment. Finally, a bi-directional LSTM-based trajectory predictor with trajectory refiner predicts trajectory based on aligned motion and mitigates foot sliding throughout the video.
 
 <Figure
-    caption="Diagram of the transformer deep learning architecture."
+    caption="The System Overview of HumanMM."
   >
     <Image source={ms_pipeline} altText="Pingpong." />
 </Figure>
@@ -206,9 +197,9 @@ coordinates as,
 ## Experiment
 
 We compare our proposed method with several state-of-the-art HMR methods SLAHMR, WHAM and GVHMR on our proposed benchmark. As illustrated in the table below, 
-our proposed method has achieved the best performance for PA\&WA-MPJPE, RTE and ROE through videos with all numbers of shots across \msaist and \msm, indicating 
+our proposed method has achieved the best performance for PA\&WA-MPJPE, RTE and ROE through videos with all numbers of shots across msaist and msh36m, indicating 
 that our method reconstructs both the global human motion and orientations in the world coordinates more accurately and robustly. For the foot sliding metric, 
-our method also performs as the best on \msm across all numbers of shots.
+our method also performs as the best across all numbers of shots.
 <Figure>
     <Image source={main_experiment} altText="exp1." />
 </Figure>
